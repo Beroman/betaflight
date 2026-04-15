@@ -128,9 +128,10 @@ uint16_t adcGetValue(adcSource_e source)
 #endif
         return adcInternalRead(source);
 #endif
-    default:
+    default: {
         const unsigned dmaIndex = adcOperatingConfig[source].dmaIndex;
         return dmaIndex < ARRAYLEN(adcValues) ? adcValues[dmaIndex] : 0;
+    }
     }
 }
 
