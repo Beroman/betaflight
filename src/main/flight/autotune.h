@@ -115,6 +115,7 @@ autotunePhase_e autotuneGetPhase(void);
 bool autotuneIsActive(void);
 bool autotuneIsComplete(void);
 uint8_t autotuneGetProgress(void);  // 0-100 percent
+autotuneAxis_e autotuneGetCurrentAxis(void);
 
 // Access tuned gains for debug/display
 const autotuneAxisState_t *autotuneGetAxisState(int axis);

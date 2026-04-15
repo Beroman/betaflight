@@ -53,6 +53,10 @@
 #include "flight/pid.h"
 #include "flight/pos_hold.h"
 
+#ifdef USE_AUTOTUNE
+#include "flight/autotune.h"
+#endif
+
 #include "io/beeper.h"
 
 #include "osd/osd.h"
@@ -445,6 +449,27 @@ void renderOsdWarning(char *warningText, bool *blinking, uint8_t *displayAttr)
         return;
     }
 #endif // USE_CHIRP
+
+#ifdef USE_AUTOTUNE
+    if (osdWarnGetState(OSD_WARNING_AUTOTUNE) && ARMING_FLAG(ARMED)) {
+        if (autotuneIsComplete()) {
+            tfp_sprintf(warningText, "AUTOTUNE DONE");
+            *displayAttr = DISPLAYPORT_SEVERITY_INFO;
+            *blinking = true;
+            return;
+        }
+        if (autotuneIsActive()) {
+            static const char *axisNames[] = { "ROLL", "PITCH", "YAW" };
+            const autotunePhase_e phase = autotuneGetPhase();
+            const int axisIdx = (int)autotuneGetCurrentAxis();
+            const char *axisName = (axisIdx >= 0 && axisIdx < 3) ? axisNames[axisIdx] : "?";
+            const char *phaseName = (phase == AUTOTUNE_PHASE_TUNE_D) ? "D" : "P";
+            tfp_sprintf(warningText, "ATUNE %s %s %d%%", axisName, phaseName, autotuneGetProgress());
+            *displayAttr = DISPLAYPORT_SEVERITY_INFO;
+            return;
+        }
+    }
+#endif // USE_AUTOTUNE
 
 }
 

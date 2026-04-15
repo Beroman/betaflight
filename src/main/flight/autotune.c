@@ -566,6 +566,11 @@ bool autotuneIsComplete(void)
     return autotuneState.phase == AUTOTUNE_PHASE_COMPLETE;
 }
 
+autotuneAxis_e autotuneGetCurrentAxis(void)
+{
+    return autotuneState.currentAxis;
+}
+
 uint8_t autotuneGetProgress(void)
 {
     // Rough progress: each axis has D + P phase.
