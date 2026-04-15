@@ -169,6 +169,7 @@ COMMON_SRC = \
             flight/mixer_tricopter.c \
             flight/pid.c \
             flight/pid_init.c \
+            flight/autotune.c \
             flight/position.c \
             flight/pos_hold_multirotor.c \
             flight/pos_hold_wing.c \

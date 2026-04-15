@@ -116,6 +116,9 @@ void sbufWriteBuildInfoFlags(sbuf_t *dst)
 #ifdef USE_CHIRP
         BUILD_OPTION_CHIRP,
 #endif
+#ifdef USE_AUTOTUNE
+        BUILD_OPTION_AUTOTUNE,
+#endif
 #ifdef USE_DASHBOARD
         BUILD_OPTION_DASHBOARD,
 #endif

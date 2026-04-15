@@ -130,6 +130,10 @@
 #endif
 #endif // ACC GYRO inclusion
 
+#if defined(USE_ACC)
+#define USE_AUTOTUNE
+#endif
+
 #if !defined(USE_FLASH_CHIP)
 
 #if !defined(USE_EXST) && !defined(USE_FLASH)

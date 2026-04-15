@@ -1313,6 +1313,17 @@ const clivalue_t valueTable[] = {
     { PARAM_NAME_CHIRP_TIME_SECONDS,            VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 1, 255 }, PG_PID_PROFILE, offsetof(pidProfile_t, chirp_time_seconds) },
 #endif
 
+#ifdef USE_AUTOTUNE
+    { PARAM_NAME_AUTOTUNE_GAIN_RAMP_RATE, VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 101, 150 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_gain_ramp_rate) },
+    { PARAM_NAME_AUTOTUNE_GAIN_MARGIN,    VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 30, 90 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_gain_margin) },
+    { PARAM_NAME_AUTOTUNE_OSC_THRESHOLD,  VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 5, 100 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_osc_threshold) },
+    { PARAM_NAME_AUTOTUNE_PI_RATIO,       VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 20, 200 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_pi_ratio) },
+    { PARAM_NAME_AUTOTUNE_MAX_GAIN_MULT,  VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 10, 100 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_max_gain_multiplier) },
+    { PARAM_NAME_AUTOTUNE_SETTLE_TIME,    VAR_UINT16 | PROFILE_VALUE, .config.minmaxUnsigned = { 100, 5000 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_settle_time_ms) },
+    { PARAM_NAME_AUTOTUNE_TIMEOUT,        VAR_UINT16 | PROFILE_VALUE, .config.minmaxUnsigned = { 5000, 60000 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_timeout_ms) },
+    { PARAM_NAME_AUTOTUNE_TUNE_YAW,       VAR_UINT8  | PROFILE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_OFF_ON }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_tune_yaw) },
+#endif
+
 #if defined(USE_ABSOLUTE_CONTROL)
     { PARAM_NAME_ABS_CONTROL_GAIN,  VAR_UINT8 | PROFILE_VALUE,  .config.minmaxUnsigned = { 0, 20 }, PG_PID_PROFILE, offsetof(pidProfile_t, abs_control_gain) },
     { "abs_control_limit",          VAR_UINT8 | PROFILE_VALUE,  .config.minmaxUnsigned = { 10, 255 }, PG_PID_PROFILE, offsetof(pidProfile_t, abs_control_limit) },

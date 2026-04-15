@@ -62,6 +62,10 @@
 #include "sensors/battery.h"
 #include "sensors/gyro.h"
 
+#ifdef USE_AUTOTUNE
+#include "flight/autotune.h"
+#endif
+
 #include "pid.h"
 
 typedef enum {
@@ -124,7 +128,7 @@ PG_RESET_TEMPLATE(pidConfig_t, pidConfig,
 #define IS_AXIS_IN_ANGLE_MODE(i) false
 #endif // USE_ACC
 
-PG_REGISTER_ARRAY_WITH_RESET_FN(pidProfile_t, PID_PROFILE_COUNT, pidProfiles, PG_PID_PROFILE, 11);
+PG_REGISTER_ARRAY_WITH_RESET_FN(pidProfile_t, PID_PROFILE_COUNT, pidProfiles, PG_PID_PROFILE, 12);
 
 void resetPidProfile(pidProfile_t *pidProfile)
 {
@@ -267,6 +271,14 @@ void resetPidProfile(pidProfile_t *pidProfile)
         .chirp_frequency_start_deci_hz = 2,
         .chirp_frequency_end_deci_hz = 6000,
         .chirp_time_seconds = 20,
+        .autotune_gain_ramp_rate = 107,      // 1.07x per second (doubles in ~10s)
+        .autotune_gain_margin = 60,          // keep 60% of oscillation gain
+        .autotune_osc_threshold = 25,        // deg/s/s slew-rate threshold
+        .autotune_pi_ratio = 80,             // I = 0.80 * P
+        .autotune_max_gain_multiplier = 40,  // max 4.0x original gain
+        .autotune_settle_time_ms = 500,
+        .autotune_timeout_ms = 30000,        // 30 seconds per phase
+        .autotune_tune_yaw = 0,              // don't tune yaw by default
     );
 }
 
@@ -1522,6 +1534,12 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
         {
             pidData[axis].Sum = pidSum;
         }
+
+#ifdef USE_AUTOTUNE
+        if (FLIGHT_MODE(AUTOTUNE_MODE)) {
+            autotuneUpdateAxis(axis, pidSum, currentTimeUs);
+        }
+#endif
     }
 
 #ifdef USE_WING
