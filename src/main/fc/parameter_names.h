@@ -212,4 +212,14 @@
 #define PARAM_NAME_IMU_PROCESS_DENOM "imu_process_denom"
 #ifdef USE_MAG
 #define PARAM_NAME_IMU_MAG_DECLINATION "mag_declination"
+
+#define PARAM_NAME_AUTOTUNE_GAIN_RAMP_RATE "autotune_gain_ramp_rate"
+#define PARAM_NAME_AUTOTUNE_GAIN_MARGIN "autotune_gain_margin"
+#define PARAM_NAME_AUTOTUNE_OSC_THRESHOLD "autotune_osc_threshold"
+#define PARAM_NAME_AUTOTUNE_PI_RATIO "autotune_pi_ratio"
+#define PARAM_NAME_AUTOTUNE_MAX_GAIN_MULT "autotune_max_gain_multiplier"
+#define PARAM_NAME_AUTOTUNE_SETTLE_TIME "autotune_settle_time_ms"
+#define PARAM_NAME_AUTOTUNE_TIMEOUT "autotune_timeout_ms"
+#define PARAM_NAME_AUTOTUNE_TUNE_YAW "autotune_tune_yaw"
+
 #endif

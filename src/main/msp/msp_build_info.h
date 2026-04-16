@@ -78,5 +78,6 @@
 #define BUILD_OPTION_ONESHOT                    8233
 #define BUILD_OPTION_PROSHOT                    8234
 #define BUILD_OPTION_PWM_OUTPUT                 8235
+#define BUILD_OPTION_AUTOTUNE                16430
 
 void sbufWriteBuildInfoFlags(sbuf_t *dst);

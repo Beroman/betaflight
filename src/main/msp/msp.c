@@ -2039,6 +2039,25 @@ case MSP_NAME:
         sbufWriteU8(dst, currentPidProfile->tpa_mode);
         sbufWriteU8(dst, currentPidProfile->tpa_rate);
         sbufWriteU16(dst, currentPidProfile->tpa_breakpoint);   // was currentControlRateProfile->tpa_breakpoint
+#ifdef USE_AUTOTUNE
+        sbufWriteU8(dst, currentPidProfile->autotune_gain_ramp_rate);
+        sbufWriteU8(dst, currentPidProfile->autotune_gain_margin);
+        sbufWriteU8(dst, currentPidProfile->autotune_osc_threshold);
+        sbufWriteU8(dst, currentPidProfile->autotune_pi_ratio);
+        sbufWriteU8(dst, currentPidProfile->autotune_max_gain_multiplier);
+        sbufWriteU16(dst, currentPidProfile->autotune_settle_time_ms);
+        sbufWriteU16(dst, currentPidProfile->autotune_timeout_ms);
+        sbufWriteU8(dst, currentPidProfile->autotune_tune_yaw);
+#else
+        sbufWriteU8(dst, 0);
+        sbufWriteU8(dst, 0);
+        sbufWriteU8(dst, 0);
+        sbufWriteU8(dst, 0);
+        sbufWriteU8(dst, 0);
+        sbufWriteU16(dst, 0);
+        sbufWriteU16(dst, 0);
+        sbufWriteU8(dst, 0);
+#endif
         break;
 
     case MSP_SENSOR_CONFIG:
@@ -3257,6 +3276,19 @@ static mspResult_e mspProcessInCommand(mspDescriptor_t srcDesc, int16_t cmdMSP, 
             currentPidProfile->tpa_rate = MIN(sbufReadU8(src), TPA_MAX);
             currentPidProfile->tpa_breakpoint = sbufReadU16(src);
         }
+
+#ifdef USE_AUTOTUNE
+        if (sbufBytesRemaining(src) >= 10) {
+            currentPidProfile->autotune_gain_ramp_rate = sbufReadU8(src);
+            currentPidProfile->autotune_gain_margin = sbufReadU8(src);
+            currentPidProfile->autotune_osc_threshold = sbufReadU8(src);
+            currentPidProfile->autotune_pi_ratio = sbufReadU8(src);
+            currentPidProfile->autotune_max_gain_multiplier = sbufReadU8(src);
+            currentPidProfile->autotune_settle_time_ms = sbufReadU16(src);
+            currentPidProfile->autotune_timeout_ms = sbufReadU16(src);
+            currentPidProfile->autotune_tune_yaw = sbufReadU8(src);
+        }
+#endif
 
         pidInitConfig(currentPidProfile);
         initEscEndpoints();

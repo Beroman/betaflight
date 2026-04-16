@@ -100,6 +100,7 @@
 
 #if !defined(USE_GYRO) && !defined(USE_ACC)
 #define USE_ACC
+#define USE_AUTOTUNE
 #define USE_GYRO
 
 #define USE_ACC_MPU6500

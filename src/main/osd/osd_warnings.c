@@ -49,6 +49,7 @@
 #include "flight/gps_rescue.h"
 #include "flight/imu.h"
 #include "flight/mixer.h"
+#include "flight/autotune.h"
 #include "flight/pid.h"
 
 #include "io/beeper.h"
@@ -417,6 +418,22 @@ void renderOsdWarning(char *warningText, bool *blinking, uint8_t *displayAttr)
         *displayAttr = DISPLAYPORT_SEVERITY_INFO;
         return;
     }
+
+
+#ifdef USE_AUTOTUNE
+    if (osdWarnGetState(OSD_WARNING_AUTOTUNE) && FLIGHT_MODE(AUTOTUNE_MODE)) {
+        if (autotuneIsComplete()) {
+            tfp_sprintf(warningText, "AUTOTUNE DONE");
+            *displayAttr = DISPLAYPORT_SEVERITY_INFO;
+            *blinking = true;
+        } else {
+            int progress = autotuneGetProgress();
+            tfp_sprintf(warningText, "TUNING %d%%", progress);
+            *displayAttr = DISPLAYPORT_SEVERITY_WARNING;
+        }
+        return;
+    }
+#endif
 
     // Visual beeper
     if (osdWarnGetState(OSD_WARNING_VISUAL_BEEPER) && osdGetVisualBeeperState()) {

@@ -46,6 +46,7 @@
 #include "fc/rc_controls.h"
 #include "fc/runtime_config.h"
 
+#include "flight/autotune.h"
 #include "flight/gps_rescue.h"
 #include "flight/imu.h"
 #include "flight/mixer.h"
@@ -116,7 +117,7 @@ PG_RESET_TEMPLATE(pidConfig_t, pidConfig,
 
 #define LAUNCH_CONTROL_YAW_ITERM_LIMIT 50 // yaw iterm windup limit when launch mode is "FULL" (all axes)
 
-PG_REGISTER_ARRAY_WITH_RESET_FN(pidProfile_t, PID_PROFILE_COUNT, pidProfiles, PG_PID_PROFILE, 8);
+PG_REGISTER_ARRAY_WITH_RESET_FN(pidProfile_t, PID_PROFILE_COUNT, pidProfiles, PG_PID_PROFILE, 9);
 
 void resetPidProfile(pidProfile_t *pidProfile)
 {
@@ -230,6 +231,14 @@ void resetPidProfile(pidProfile_t *pidProfile)
         .ez_landing_threshold = 25,
         .ez_landing_limit = 15,
         .ez_landing_speed = 50,
+        .autotune_gain_ramp_rate = 107,      // 1.07x per second (doubles in ~10s)
+        .autotune_gain_margin = 60,          // keep 60% of oscillation gain
+        .autotune_osc_threshold = 25,        // deg/s/s slew-rate threshold
+        .autotune_pi_ratio = 80,             // I = 0.80 * P
+        .autotune_max_gain_multiplier = 40,  // max 4.0x original gain
+        .autotune_settle_time_ms = 500,
+        .autotune_timeout_ms = 30000,        // 30 seconds per phase
+        .autotune_tune_yaw = 0,              // don't tune yaw by default
     );
 
 #ifndef USE_D_MIN
@@ -1134,6 +1143,10 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
         {
             pidData[axis].Sum = pidSum;
         }
+
+#ifdef USE_AUTOTUNE
+        autotuneUpdateAxis(axis, pidData[axis].Sum, currentTimeUs);
+#endif
     }
 
     // Disable PID control if at zero throttle or if gyro overflow detected

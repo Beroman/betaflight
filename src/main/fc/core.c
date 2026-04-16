@@ -67,6 +67,7 @@
 #endif
 
 #include "flight/imu.h"
+#include "flight/autotune.h"
 #include "flight/mixer.h"
 #include "flight/pid.h"
 #include "flight/position.h"
@@ -1086,6 +1087,18 @@ void processRxModes(timeUs_t currentTimeUs)
     }
 #endif
 
+
+#ifdef USE_AUTOTUNE
+    if (IS_RC_MODE_ACTIVE(BOXAUTOTUNE)) {
+        if (ARMING_FLAG(ARMED) && FLIGHT_MODE(ANGLE_MODE)) {
+            ENABLE_FLIGHT_MODE(AUTOTUNE_MODE);
+        } else {
+            DISABLE_FLIGHT_MODE(AUTOTUNE_MODE);
+        }
+    } else {
+        DISABLE_FLIGHT_MODE(AUTOTUNE_MODE);
+    }
+#endif
     pidSetAntiGravityState(IS_RC_MODE_ACTIVE(BOXANTIGRAVITY) || featureIsEnabled(FEATURE_ANTI_GRAVITY));
 }
 

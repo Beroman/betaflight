@@ -1263,6 +1263,17 @@ const clivalue_t valueTable[] = {
     { PARAM_NAME_EZ_LANDING_LIMIT,          VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 0, 75 }, PG_PID_PROFILE, offsetof(pidProfile_t, ez_landing_limit) },
     { PARAM_NAME_EZ_LANDING_SPEED,          VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 0, 250 }, PG_PID_PROFILE, offsetof(pidProfile_t, ez_landing_speed) },
 
+#ifdef USE_AUTOTUNE
+    { PARAM_NAME_AUTOTUNE_GAIN_RAMP_RATE,     VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 100, 200 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_gain_ramp_rate) },
+    { PARAM_NAME_AUTOTUNE_GAIN_MARGIN,        VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 20, 90 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_gain_margin) },
+    { PARAM_NAME_AUTOTUNE_OSC_THRESHOLD,      VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 5, 100 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_osc_threshold) },
+    { PARAM_NAME_AUTOTUNE_PI_RATIO,           VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 30, 150 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_pi_ratio) },
+    { PARAM_NAME_AUTOTUNE_MAX_GAIN_MULT,      VAR_UINT8  | PROFILE_VALUE, .config.minmaxUnsigned = { 10, 100 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_max_gain_multiplier) },
+    { PARAM_NAME_AUTOTUNE_SETTLE_TIME,        VAR_UINT16 | PROFILE_VALUE, .config.minmaxUnsigned = { 100, 5000 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_settle_time_ms) },
+    { PARAM_NAME_AUTOTUNE_TIMEOUT,            VAR_UINT16 | PROFILE_VALUE, .config.minmaxUnsigned = { 5000, 60000 }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_timeout_ms) },
+    { PARAM_NAME_AUTOTUNE_TUNE_YAW,           VAR_UINT8  | PROFILE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_OFF_ON }, PG_PID_PROFILE, offsetof(pidProfile_t, autotune_tune_yaw) },
+#endif
+
 // PG_TELEMETRY_CONFIG
 #ifdef USE_TELEMETRY
     { "tlm_inverted",               VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_OFF_ON }, PG_TELEMETRY_CONFIG, offsetof(telemetryConfig_t, telemetry_inverted) },

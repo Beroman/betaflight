@@ -33,6 +33,8 @@
 
 #include "drivers/dshot_command.h"
 
+#include "flight/autotune.h"
+
 #include "fc/rc_controls.h"
 #include "fc/runtime_config.h"
 #include "fc/rc.h"
@@ -263,6 +265,9 @@ void pidInit(const pidProfile_t *pidProfile)
     pidSetTargetLooptime(gyro.targetLooptime); // Initialize pid looptime
     pidInitFilters(pidProfile);
     pidInitConfig(pidProfile);
+#ifdef USE_AUTOTUNE
+    autotuneInit();
+#endif
 #ifdef USE_RPM_FILTER
     rpmFilterInit(rpmFilterConfig(), gyro.targetLooptime);
 #endif

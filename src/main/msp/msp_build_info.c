@@ -167,6 +167,9 @@ void sbufWriteBuildInfoFlags(sbuf_t *dst)
 #ifdef USE_PWM_OUTPUT
         BUILD_OPTION_PWM_OUTPUT,
 #endif
+#ifdef USE_AUTOTUNE
+    BUILD_OPTION_AUTOTUNE,
+#endif
     };
 
     for (unsigned i = 0; i < ARRAYLEN(options); i++)
